@@ -1,6 +1,7 @@
 import fractions
 import logging
 import math
+import traceback
 from itertools import tee
 from struct import pack, unpack_from
 from typing import Iterator, List, Optional, Sequence, Tuple, Type, TypeVar
@@ -103,7 +104,7 @@ class H264PayloadDescriptor:
 
 class H264Decoder(Decoder):
     def __init__(self) -> None:
-        self.codec = av.CodecContext.create("h264", "r")
+        self.codec = av.CodecContext.create("h264_cuvid", "r")
 
     def decode(self, encoded_frame: JitterFrame) -> List[Frame]:
         try:
@@ -112,7 +113,7 @@ class H264Decoder(Decoder):
             packet.time_base = VIDEO_TIME_BASE
             frames = self.codec.decode(packet)
         except av.AVError as e:
-            logger.warning(
+            logger.error(
                 "H264Decoder() failed to decode, skipping package: " + str(e)
             )
             return []
@@ -283,9 +284,10 @@ class H264Encoder(Encoder):
         if self.codec is None:
             try:
                 self.codec, self.codec_buffering = create_encoder_context(
-                    "h264_omx", frame.width, frame.height, bitrate=self.target_bitrate
+                    "h264_nvenc", frame.width, frame.height, bitrate=self.target_bitrate
                 )
             except Exception:
+                logger.error(f"Failed to create h264_nvenc encoder context with:\n{traceback.format_exc()}")
                 self.codec, self.codec_buffering = create_encoder_context(
                     "libx264",
                     frame.width,
