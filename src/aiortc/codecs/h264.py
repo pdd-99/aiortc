@@ -133,9 +133,10 @@ def create_encoder_context(
     codec.time_base = fractions.Fraction(1, MAX_FRAME_RATE)
     codec.options = {
         "profile": "baseline",
-        "level": "31",
         "tune": "zerolatency",  # does nothing using h264_omx
     }
+    if codec_name != "h264_nvenc":
+        codec.options["level"] = "31"
     codec.open()
     return codec, codec_name == "h264_omx"
 
