@@ -138,7 +138,8 @@ def create_encoder_context(
     if codec_name != "h264_nvenc":
         codec.options["level"] = "31"
     else:
-        codec.options["preset"] = "llhq"
+        # codec.options["preset"] = "llhq"
+        codec.options["preset"] = "ll"
         # codec.options["rc"] = "cbr_ld_hq"
     codec.open()
     return codec, codec_name == "h264_omx"
