@@ -139,7 +139,7 @@ def create_encoder_context(
         codec.options["level"] = "31"
     else:
         codec.options["preset"] = "llhq"
-        codec.options["rc"] = "cbr_ld_hq"
+        # codec.options["rc"] = "cbr_ld_hq"
     codec.open()
     return codec, codec_name == "h264_omx"
 
@@ -274,9 +274,9 @@ class H264Encoder(Encoder):
         if self.codec and (
             frame.width != self.codec.width
             or frame.height != self.codec.height
-            # we only adjust bitrate if it changes by over 50%
+            # we only adjust bitrate if it changes by over 10%
             or abs(self.target_bitrate - self.codec.bit_rate) / self.codec.bit_rate
-            > 0.5
+            > 0.1
         ):
             self.buffer_data = b""
             self.buffer_pts = None
