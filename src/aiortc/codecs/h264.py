@@ -279,6 +279,8 @@ class H264Encoder(Encoder):
             or abs(self.target_bitrate - self.codec.bit_rate) / self.codec.bit_rate
             > 0.1
         ):
+            if self.codec:
+                logger.warning(f"Stream bitrate changed to {self.codec.bit_rate}. Recreating encoder with target bitrate {self.target_bitrate}")
             self.buffer_data = b""
             self.buffer_pts = None
             self.codec = None
