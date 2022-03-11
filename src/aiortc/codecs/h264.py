@@ -274,9 +274,9 @@ class H264Encoder(Encoder):
         if self.codec and (
             frame.width != self.codec.width
             or frame.height != self.codec.height
-            # we only adjust bitrate if it changes by over 10%
+            # we only adjust bitrate if it changes by over 50%
             or abs(self.target_bitrate - self.codec.bit_rate) / self.codec.bit_rate
-            > 0.1
+            > 0.5
         ):
             self.buffer_data = b""
             self.buffer_pts = None
