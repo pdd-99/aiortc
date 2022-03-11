@@ -138,9 +138,9 @@ def create_encoder_context(
     if codec_name != "h264_nvenc":
         codec.options["level"] = "31"
     else:
-        # codec.options["preset"] = "llhq"
-        codec.options["preset"] = "ll"
-        # codec.options["rc"] = "cbr_ld_hq"
+        codec.options["preset"] = "llhq"
+        # codec.options["preset"] = "ll" # This is fast but quality is very bad
+        # codec.options["rc"] = "cbr_ld_hq" # This cause frame skipping
     codec.open()
     return codec, codec_name == "h264_omx"
 
